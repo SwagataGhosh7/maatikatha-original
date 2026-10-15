@@ -167,7 +167,13 @@ let isMongoConnected = false;
 // 2. CONNECTION & AUTO-SEED
 // ==========================================
 async function connectDB(retries = 3) {
-  const originalUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/maatikatha';
+  const originalUri = process.env.MONGODB_URI || (process.env.NODE_ENV === 'production' ? null : 'mongodb://127.0.0.1:27017/maatikatha');
+
+  if (!originalUri) {
+    console.warn('[DB] No MONGODB_URI configured. Falling back to built-in mock data layer.');
+    isMongoConnected = false;
+    return;
+  }
 
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {

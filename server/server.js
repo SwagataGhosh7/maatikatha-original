@@ -2736,9 +2736,26 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
+// ==========================================
+// 9. STATIC FRONTEND SERVING (PRODUCTION)
+// ==========================================
+const clientDistPath = path.join(__dirname, '../client/dist');
+if (fs.existsSync(clientDistPath)) {
+  console.log(`[Static] Serving frontend from ${clientDistPath}`);
+  app.use(express.static(clientDistPath));
+
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) {
+      return next();
+    }
+    res.sendFile(path.join(clientDistPath, 'index.html'));
+  });
+}
+
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`=========================================`);
   console.log(`🌾 MaatiKatha Server running on port ${PORT}`);
-  console.log(`📡 URL: http://localhost:${PORT}`);
+  console.log(`📡 URL: http://0.0.0.0:${PORT}`);
   console.log(`=========================================`);
 });
+

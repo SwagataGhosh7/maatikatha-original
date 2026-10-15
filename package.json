@@ -4,10 +4,11 @@
   "description": "Zero-Hardware Voice-First Farming Assistant with AI Predictive Modeling",
   "scripts": {
     "dev": "node dev.js",
-    "start": "node dev.js",
+    "start": "node server/server.js",
     "server": "npm --prefix server start",
     "client": "npm --prefix client run dev",
-    "build": "npm --prefix client run build",
+    "install:all": "npm --prefix server install && npm --prefix client install",
+    "build": "npm --prefix server install && npm --prefix client install && npm --prefix client run build",
     "test": "node server/test_api.js"
   },
   "keywords": [
